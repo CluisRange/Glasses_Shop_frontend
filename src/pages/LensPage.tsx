@@ -45,15 +45,15 @@ const LensPage: FC = () => {
             <div className='d-flex flex-column ms-4 content-fluid'>
                <h2 className='lens-name text-uppercase'>{lens?.name}</h2>
                <div className='container-fluid mt-3'>
-                    <div className='row'>
-                        <div className='lens-img-box col-3 p-0'>
-                            <img src={lens?.url} className='lens-img'></img>
+                    <div className='d-flex imgAndDscr'>
+                        <div className='lens-img-box p-0'>
+                            <img src={lens?.url.replace('http://localhost:9000', '')} className='lens-img'></img>
                         </div>
-                        <div className='lens-description ps-5 col-8 mt-2'>
-                            <p>{lens?.description}</p>
+                        <div className='lens-description ps-5 mt-2'>
+                            {lens?.description}
                         </div>
                     </div>
-                    <div className='lens-price col-3 mt-2'> Цена: {lens?.price} руб.</div>
+                    <div className='lens-price mt-2'> Цена: {lens?.price} руб.</div>
                </div>
             </div>
         </>

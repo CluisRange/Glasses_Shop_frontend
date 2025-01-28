@@ -17,3 +17,13 @@
     justify-content: space-between;
     align-items:start;
 }
+
+
+@media (max-width: 600px) {
+    .inputField {
+        width: 100% !important;
+    }
+    .basket_img{
+        margin-right: 2em;
+    }
+}

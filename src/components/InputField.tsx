@@ -10,7 +10,7 @@ interface Props {
 
 const InputField: FC<Props> = ({ value, setValue, placeholder, inputClass }) => {
     return (
-        <div className="inputField" style={{ width: '50%', marginLeft: "1em"}}>
+        <div className="inputField" style={{ width: '50%'}}>
             <input value={value} className={inputClass} placeholder={placeholder} onChange={(event => setValue(event.target.value))} style={{ width: '100%' }}/>   
         </div>
     )
