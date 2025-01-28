@@ -1,0 +1,19 @@
+.basket_img{
+    height: 3rem;
+    margin-right: 2em;
+}
+
+.order-content{
+    margin-right: 1rem;
+}
+
+.searchlens{
+ width: 60%;
+ margin-left: 1em;
+}
+
+.search_and_basket{
+    display: flex;
+    justify-content: space-between;
+    align-items:start;
+}

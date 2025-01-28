@@ -1,0 +1,23 @@
+@import url('./fonts.css');
+
+.lens-img-box{
+    border-radius: 10px;
+    overflow: hidden;
+    height: 200px 
+}
+
+.lens-name{
+    font-family: Inter;
+    font-size: 2em;
+}
+
+.lens-description{
+    font-family: Manrope;
+    font-size: 1em;
+}
+
+
+.lens-price{
+    font-family: Manrope;
+    font-size: 1.5em;
+}
