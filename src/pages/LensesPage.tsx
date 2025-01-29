@@ -73,7 +73,7 @@ const LensesPage: FC = () => {
                         <InputField value={searchLensMaxPrice} setValue={setsearchLensMaxPrice} placeholder='Цена до, руб.' inputClass='InputField' />
                         <Button className='mt-3 ms-3' variant='outline-danger' onClick={handleSearch} style={{ width: '100px' }}>Поиск</Button>
                     </div>
-                    <img src='/src/assets/img/empty_basket.jpeg' className='basket_img ms-3'></img>
+                    <img src='/Glasses_Shop_frontend/img/empty_basket.jpeg' className='basket_img ms-3'></img>
                 </div>
 
                 <div className='d-flex justify-content-center'>

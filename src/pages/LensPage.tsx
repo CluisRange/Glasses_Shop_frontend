@@ -26,6 +26,7 @@ const LensPage: FC = () => {
         if (isNaN(id_numeric)) return
 
         getLensById(id_numeric).then((response) => {
+
             setLens(response)
         })
     }, [])
@@ -47,7 +48,7 @@ const LensPage: FC = () => {
                <div className='container-fluid mt-3'>
                     <div className='d-flex imgAndDscr'>
                         <div className='lens-img-box p-0'>
-                            <img src={lens?.url.replace('http://localhost:9000', '')} className='lens-img'></img>
+                            <img src={lens?.url.replace('http://localhost:9000', '') || '/Glasses_Shop_frontend/img/unknownLens.jpg'} className='lens-img'></img>
                         </div>
                         <div className='lens-description ps-5 mt-2'>
                             {lens?.description}

@@ -20,7 +20,7 @@ const LensCard: FC<LensCardProps> = (
     return (
         <Card  style={{ width: '18rem', height: '25rem' }} >
             <Link className='align-self-start' style={{ width: '100%' }} to={`${ROUTES.LENSES}/${id}`}>
-                <Card.Img src={imageUrl.replace('http://localhost:9000', '') || '/src/assets/img/unknownLens.jpg'}/>
+                <Card.Img src={imageUrl.replace('http://localhost:9000', '') || '/Glasses_Shop_frontend/img/unknownLens.jpg'}/>
             </Link>
             <Card.Body className='d-flex flex-column text-center' style = {{justifyContent:'space-between'}}>
                 <Card.Title style={{fontFamily:'Monrope'}}>{title}</Card.Title>

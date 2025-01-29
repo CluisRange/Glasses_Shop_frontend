@@ -34,9 +34,13 @@ export const getLensById = async (id: number): Promise<LensInter> => {
     return fetch(`/api/lens/${id}/`).then(
         (response) => response.json()
     ).catch(() => {
+        let lens_
         LENSES_MOCK.lenses.forEach((lens: LensInter) => {
             if (lens.lens_id === id)
-                return lens
+                lens_ = lens
+                
         })
+        return lens_
+        
     })
 }
