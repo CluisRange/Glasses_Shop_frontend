@@ -5,7 +5,7 @@
   "identifier": "glasses-shop",
   "build": {
     "frontendDist": "../dist",
-    "devUrl": "http://192.168.253.1:3000",
+    "devUrl": "http://172.20.10.2:3000",
     "beforeDevCommand": "npm run dev",
     "beforeBuildCommand": "npm run build"
   },
