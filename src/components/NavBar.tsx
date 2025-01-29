@@ -12,7 +12,7 @@ const NavigationBar: FC = () => {
     return (
         <Navbar expand = "lg" className="border nav w-100">
             <Navbar.Brand as={Link} to={ROUTES.HOME}>
-                <img src="/Glasses_Shop_frontend/img/HeaderPic.jpg" style={{ width: '15rem', marginLeft: '1rem' }} className='brandimg'/>
+                <img src="\img\HeaderPic.jpg" style={{ width: '15rem', marginLeft: '1rem' }} className='brandimg'/>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" style={{marginRight: '1rem' }}/>
             <Navbar.Collapse id="basic-navbar-nav">

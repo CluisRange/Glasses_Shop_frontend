@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react'
 
-import { LensInter, getLensesByName } from '../modules/Api'
-
+import { LensInter, getLensesByName, ResultInter} from '../modules/Api'
+import {LENSES_MOCK} from '../modules/Mock'
 
 import NavigationBar from '../components/NavBar'
 import LensCard from '../components/LensCard'
@@ -14,6 +14,7 @@ import { ROUTE_LABELS } from '../modules/Routes'
 import { useDispatch } from 'react-redux'
 import { setSearchLensValuesAction, useSearchLensValues } from '../slices/dataSlice'
 
+
 const LensesPage: FC = () => {
 
     const [lenses, setLenses] = useState<LensInter[]>([])
@@ -25,6 +26,7 @@ const LensesPage: FC = () => {
     const dispatch = useDispatch()
 
     const updateLenses = (searchLensValues_ = { name: '', minPrice: '', maxPrice: '' }) => {
+        let gotResult = false
         if (searchLensValues_.name === '' && searchLensValues_.minPrice === '' && searchLensValues_.maxPrice === '') {
             searchLensValues_ = {
                 name: searchLensName,
@@ -38,23 +40,33 @@ const LensesPage: FC = () => {
         if (isNaN(min_price_numeric)) min_price_numeric = 0
         let max_price_numeric: number = parseInt(searchLensValues_.maxPrice)
         if (isNaN(max_price_numeric)) max_price_numeric = 1000000
+
         getLensesByName(searchLensValues_.name, min_price_numeric, max_price_numeric).then((response) => {
             setLenses(response.lenses)
+            gotResult = true
         })
+        
+        setTimeout(() => {
+            if (!gotResult) {
+                let result: ResultInter = { active_glasses_order: LENSES_MOCK.active_glasses_order, lenses: [] };
+                LENSES_MOCK.lenses.forEach((lens: LensInter) => {
+                    if (lens.name.includes(searchLensValues_.name,) && lens.price >= min_price_numeric && lens.price <= max_price_numeric) {
+                        result.lenses.push(lens);
+                    }
+                });
+                setLenses(result.lenses)
+            }
+        }, 1000);
+
     }
 
     useEffect(() => {
-        console.log(reactSearchValue.name, searchLensName)
         setSearchLensName(reactSearchValue.name)
         setsearchLensMaxPrice(reactSearchValue.maxPrice)
         setsearchLensMinPrice(reactSearchValue.minPrice)
 
         updateLenses(reactSearchValue)
     },[])
-
-    useEffect(() => {
-        console.log(reactSearchValue, '+', searchLensName);
-    }, [searchLensName]);
 
     const handleSearch = () => {
         updateLenses()
@@ -73,23 +85,23 @@ const LensesPage: FC = () => {
                         <InputField value={searchLensMaxPrice} setValue={setsearchLensMaxPrice} placeholder='Цена до, руб.' inputClass='InputField' />
                         <Button className='mt-3 ms-3' variant='outline-danger' onClick={handleSearch} style={{ width: '100px' }}>Поиск</Button>
                     </div>
-                    <img src='/Glasses_Shop_frontend/img/empty_basket.jpeg' className='basket_img ms-3'></img>
+                    <img src='\img\empty_basket.jpeg' className='basket_img ms-3'></img>
                 </div>
 
                 <div className='d-flex justify-content-center'>
-                <div className='d-flex flex-wrap gap-5 ms-4 me-4 mt-5 w-100 pe-4'>
-                    {lenses.map((lens) => {
-                        return (
-                            <LensCard
-                                key={lens.lens_id}
-                                id={lens.lens_id}
-                                title={lens.name}
-                                imageUrl={lens.url}
-                                price={lens.price}
-                            ></LensCard>
-                        )
-                    })}
-                </div>
+                    <div className='d-flex cards flex-wrap gap-5 ms-4 me-4 mt-5 w-100 pe-4'>
+                        {lenses.map((lens) => {
+                            return (
+                                <LensCard
+                                    key={lens.lens_id}
+                                    id={lens.lens_id}
+                                    title={lens.name}
+                                    imageUrl={lens.url}
+                                    price={lens.price}
+                                ></LensCard>
+                            )
+                        })}
+                    </div>
                 </div>
             </div>
         </>
