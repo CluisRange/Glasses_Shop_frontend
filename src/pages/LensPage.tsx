@@ -6,8 +6,6 @@ import Navigationbar from '../components/NavBar'
 
 import '../assets/css/lensPage.css'
 import { BreadCrumbs } from '../components/BreadCrumbs'
-import {img_proxy_addr} from '../../target-config'
-import { LENSES_MOCK } from '../modules/Mock'
 
 
 const LensPage: FC = () => {
@@ -26,22 +24,10 @@ const LensPage: FC = () => {
         if (!id) return
         let id_numeric: number = parseInt(id)
         if (isNaN(id_numeric)) return
-        let gotResult = false
-        getLensById(id_numeric).then((response) => {
-            if (response) {
-                gotResult = true
-                setLens(response)
-            }
-        })
 
-        setTimeout(() => {
-            if (!gotResult) {
-            const foundLens = LENSES_MOCK.lenses.find((lens: LensInter) => lens.lens_id == id_numeric);
-            if (foundLens) {
-                setLens(foundLens);
-            }
-            }
-        }, 1000);
+        getLensById(id_numeric).then((response) => {
+            setLens(response)
+        })
     }, [])
 
     return (
@@ -61,7 +47,7 @@ const LensPage: FC = () => {
                <div className='container-fluid mt-3'>
                     <div className='d-flex imgAndDscr'>
                         <div className='lens-img-box p-0'>
-                            <img src={lens?.url.replace('http://localhost:9000', img_proxy_addr)} className='lens-img'></img>
+                            <img src={lens?.url.replace('http://localhost:9000', '')} className='lens-img'></img>
                         </div>
                         <div className='lens-description ps-5 mt-2'>
                             {lens?.description}

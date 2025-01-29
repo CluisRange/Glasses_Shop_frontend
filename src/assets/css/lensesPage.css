@@ -16,6 +16,7 @@
     display: flex;
     justify-content: space-between;
     align-items:start;
+    text-decoration: none;
 }
 
 
@@ -28,6 +29,17 @@
     }
 }
 
-.cards{
-    max-width: 1000px;
+.basket_count{
+    position: relative;
+    color: #ffffff;
+    font-size: 1em;
+    font-weight: 500;
+    margin: 0;
+    padding: 0;
+    bottom: 47px;
+    width: 0px;
+    left: 48%;
+    text-decoration: none !important;
+    text-align: center;
+    pointer-events: none;
 }

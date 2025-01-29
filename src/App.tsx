@@ -1,33 +1,31 @@
-import MainPage from './pages/MainPage'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { ROUTES } from './modules/Routes'
 import LensesPage from './pages/LensesPage'
+import MainPage from './pages/MainPage'
 import LensPage from './pages/LensPage'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { invoke } from "@tauri-apps/api/core";
-import { useEffect} from 'react';
+import LoginPage from "./pages/LoginPage"
+import GlassesOrderPage from './pages/GlassesOrderPage'
+import GlassesOrdersPage from './pages/GlassesOrdersPage'
+import RegistrationPage from './pages/RegistrationPage'
+import PersonalAccountPage from './pages/PersonalAccountPage'
 
 function App() {
-    useEffect(() => {
-      invoke('tauri', {cmd: 'create'})
-      .then((response: any) => console.log(response))
-      .catch((error: any) => console.log(error))
-  
-      return () => {
-        invoke('tauri', {cmd: 'close'})
-        .then((response: any) => console.log(response))
-        .catch((error: any) => console.log(error))
-      }
-    }, [])
-
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path={ROUTES.HOME} index element={<MainPage />} />
-        <Route path={ROUTES.LENSES} element={<LensesPage />} />
-        <Route path={ROUTES.LENSES + "/:id"} element={<LensPage />} />
-      </Routes>
-    </BrowserRouter>
-  );
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path = {ROUTES.HOME} element = {<MainPage />} />
+          <Route path = {ROUTES.LENSES} element = {<LensesPage />} />
+          <Route path = {ROUTES.LENSES + "/:id"} element = {<LensPage />} />
+          <Route path = {ROUTES.LOGIN} element = {<LoginPage />} />
+          <Route path = {ROUTES.GLASSES_ORDER  + "/:id"} element = {<GlassesOrderPage />} />
+          <Route path = {ROUTES.GLASSES_ORDER} element = {<GlassesOrdersPage />} />
+          <Route path = {ROUTES.REGISTRATION} element = {<RegistrationPage />} />
+          <Route path = {ROUTES.ACCOUNT} element = {<PersonalAccountPage />} />
+        </Routes> 
+      </BrowserRouter>
+    </>
+  )
 }
 
-export default App;
+export default App

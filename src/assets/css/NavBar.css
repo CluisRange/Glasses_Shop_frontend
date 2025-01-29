@@ -1,6 +1,6 @@
 @import url('./fonts.css');
 
-.me-auto{
+.NavBarTextStyle{
     font-family: Manrope;
     font-size: 25px;
 }
@@ -8,6 +8,14 @@
 @media (max-width: 600px) {
     .brandimg {
         width: 8rem !important;
+    }   
+}
+
+.logout-btn{
+    background-color: #05aaff;
+    height: 2.5rem;
     }
-    
+
+.logout-btn:hover {
+    background-color: #0288d1;
 }

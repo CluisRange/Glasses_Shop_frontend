@@ -1,0 +1,14 @@
+@import url('./fonts.css');
+
+.glasses-order-card-text{
+    margin-left: 1rem;
+    width: 9rem;
+    font-family: Manrope;
+    text-decoration: none;
+}
+
+.glasses-order-card-text-width{
+    margin-left: 1rem;
+    width: 11rem;
+    text-decoration: none;
+}
