@@ -8,6 +8,9 @@ import GlassesOrderPage from './pages/GlassesOrderPage'
 import GlassesOrdersPage from './pages/GlassesOrdersPage'
 import RegistrationPage from './pages/RegistrationPage'
 import PersonalAccountPage from './pages/PersonalAccountPage'
+import LensesChangePage from './pages/LensesChangePage'
+import PageNotFound from './pages/Page404'
+import PageUnauthorized from './pages/Page403'
 
 function App() {
   return (
@@ -22,6 +25,9 @@ function App() {
           <Route path = {ROUTES.GLASSES_ORDER} element = {<GlassesOrdersPage />} />
           <Route path = {ROUTES.REGISTRATION} element = {<RegistrationPage />} />
           <Route path = {ROUTES.ACCOUNT} element = {<PersonalAccountPage />} />
+          <Route path = {ROUTES.LENSES_CHANGE} element = {<LensesChangePage />} />
+          <Route path = {ROUTES.PAGE_NOT_FOUND} element = {<PageNotFound/>} />
+          <Route path = {ROUTES.ANAUTHORIZED} element = {<PageUnauthorized/>} />
         </Routes> 
       </BrowserRouter>
     </>

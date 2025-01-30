@@ -14,6 +14,7 @@ import { deleteGlassesOrder, setError, setPhone, updateGlassesOrderFields, saveG
 
 import '../assets/css/glassesOrderPage.css'
 const GlassesOrderPage: FC = () => {
+    const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
 
     const dispatch: AppDispatch = useDispatch()
     const { id } = useParams()
@@ -69,10 +70,17 @@ const GlassesOrderPage: FC = () => {
     }
 
     useEffect(() => {
-        if (id) {
-            dispatch(getGlassesOrder(id));
+        if(!isAuthenticated) {
+            navigate(ROUTES.PAGE_NOT_FOUND);
         }
-    }, [dispatch]);
+        if (id) {
+            dispatch(getGlassesOrder(id)).then((response) => {
+                if (!response) {
+                    navigate(ROUTES.PAGE_NOT_FOUND);
+                }
+            });
+        }
+    }, [dispatch, id, isAuthenticated, navigate]);
     
     return (
     <>

@@ -4,6 +4,7 @@ import { api } from '../api';
 interface UserState {
   username: string;
   isAuthenticated: boolean;
+  isCurator: boolean;
     data: {
         first_name: string;
         last_name: string;
@@ -12,7 +13,7 @@ interface UserState {
   error?: string | null; 
   loading: boolean;
 }
-// дебаг-версия
+
 const initialState: UserState = {
   username: '',
   data: {
@@ -21,6 +22,7 @@ const initialState: UserState = {
     email: '',
   },
   isAuthenticated: false,
+  isCurator: false,
   error: null,
   loading : false,
 };
@@ -92,6 +94,12 @@ const userSlice = createSlice({
             .addCase(loginUserAsync.fulfilled, (state, action) => {
                 const { username } = action.payload;
                 state.username = username;
+                state.data = {
+                  first_name: action.payload.first_name,
+                  last_name: action.payload.last_name,
+                  email: action.payload.email,
+                };
+                state.isCurator = action.payload.is_staff || action.payload.is_superuser;
                 state.isAuthenticated = true;
                 state.error = null;
                 state.loading = false;
@@ -106,7 +114,9 @@ const userSlice = createSlice({
             })
             .addCase(logoutUserAsync.fulfilled, (state) => {
                 state.username = '';
+                state.data = initialState.data
                 state.isAuthenticated = false;
+                state.isCurator = false;
                 state.error = null;
                 state.loading = false;
             })
@@ -118,9 +128,16 @@ const userSlice = createSlice({
                 state.error = null;
                 state.loading = true;
             })
-            .addCase(registerUserAsync.fulfilled, (state) => {
+            .addCase(registerUserAsync.fulfilled, (state, action) => {
                 state.error = null;
                 state.loading = false;
+                const { username } = action.payload;
+                state.username = username;
+                state.data = {
+                  first_name: action.payload.first_name,
+                  last_name: action.payload.last_name,
+                  email: action.payload.email,
+                };
             })
             .addCase(registerUserAsync.rejected, (state, action) => {
                 state.error = action.payload as string;

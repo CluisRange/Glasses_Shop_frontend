@@ -16,6 +16,7 @@ const PersonalAccountPage: React.FC = () => {
     const error = useSelector((state: RootState) => state.user.error);
     const username = useSelector((state: RootState) => state.user.username);
     const data = useSelector((state: RootState) => state.user.data);
+    const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -38,11 +39,14 @@ const PersonalAccountPage: React.FC = () => {
         navigate(`${ROUTES.LENSES}`);
     };
 
-    useEffect(() => {      
+    useEffect(() => {
+        if (!isAuthenticated) {
+            navigate(ROUTES.ANAUTHORIZED);
+            return;
+        }
         dispatch(changePersonalDataAsync({}));
-        console.log(data)
         setFormData({username: username, first_name: data.first_name, last_name: data.last_name, email: data.email, password: '', password_confirm: ''});
-    },[dispatch])
+    },[dispatch, isAuthenticated, navigate])
 
     return (
         <BasePage>

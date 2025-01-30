@@ -143,6 +143,7 @@ const draftGlassesOrderSlice = createSlice({
                 state.phone = action.payload.phone;
                 state.order_sum = action.payload.order_sum;
                 state.lenses = action.payload.lenses || [];
+                state.error = null;
             }
             })
             .addCase(getGlassesOrder.rejected, (state) => {
@@ -152,10 +153,12 @@ const draftGlassesOrderSlice = createSlice({
 
             .addCase(deleteGlassesOrder.pending, (state) => {
             state.loading = true;
+            
             })
             .addCase(deleteGlassesOrder.fulfilled, (state) => {
             state.loading = false;
             state = initialState;
+            
             })
             .addCase(deleteGlassesOrder.rejected, (state) => {
             state.loading = false;
@@ -167,6 +170,7 @@ const draftGlassesOrderSlice = createSlice({
             })
             .addCase(updateGlassesOrderFields.fulfilled, (state) => {
             state.loading = false;
+            state.error = null;
             })
             .addCase(updateGlassesOrderFields.rejected, (state) => {
             state.loading = false;
@@ -179,10 +183,11 @@ const draftGlassesOrderSlice = createSlice({
             .addCase(saveGlassesOrder.fulfilled, (state) => {
             state.loading = false;
             state = initialState;
+            
             })
             .addCase(saveGlassesOrder.rejected, (state) => {
             state.loading = false;
-            state.error = 'Ошибка при сохранении данных';
+            state.error = 'Заполните все дополнительные поля';
             })
 
             .addCase(deleteLensFromGlassesOrder.pending, (state) => {
@@ -191,6 +196,7 @@ const draftGlassesOrderSlice = createSlice({
             .addCase(deleteLensFromGlassesOrder.fulfilled, (state, action) => {
             state.loading = false;
             state.lenses = state.lenses.filter((lens) => lens.lens?.lens_id !== action.meta.arg.lensId);
+            state.error = null;
             })
             .addCase(deleteLensFromGlassesOrder.rejected, (state) => {
             state.loading = false;
@@ -207,6 +213,7 @@ const draftGlassesOrderSlice = createSlice({
             if (lens) {
                 lens.dioptres = dioptres;
             }
+            state.error = null;
             })
             .addCase(updateLensDioptres.rejected, (state) => {
             state.loading = false;

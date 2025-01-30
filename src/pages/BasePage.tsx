@@ -32,7 +32,7 @@ const BasePage: FC<Props> = ({ children }) => {
         if (error) {
             setTimeout(() => {
                 dispatch(setError(''));
-            }, 5000);
+            }, 3000);
         }
     });
 

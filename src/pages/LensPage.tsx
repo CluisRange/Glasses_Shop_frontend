@@ -1,11 +1,12 @@
 import { FC, useEffect, useState } from 'react'
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 
 import { LensInter, getLensById } from '../modules/Api'
 import Navigationbar from '../components/NavBar'
 
 import '../assets/css/lensPage.css'
 import { BreadCrumbs } from '../components/BreadCrumbs'
+import { ROUTES } from '../modules/Routes'
 
 
 const LensPage: FC = () => {
@@ -19,6 +20,7 @@ const LensPage: FC = () => {
     })
 
     const { id } = useParams()
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (!id) return
@@ -26,9 +28,15 @@ const LensPage: FC = () => {
         if (isNaN(id_numeric)) return
 
         getLensById(id_numeric).then((response) => {
-            setLens(response)
+            if (!response) {
+                navigate(ROUTES.PAGE_NOT_FOUND)
+            } else {
+                setLens(response)
+            }
+        }).catch(() => {
+            navigate(ROUTES.PAGE_NOT_FOUND)
         })
-    }, [])
+    }, [id, navigate])
 
     return (
         <>
@@ -47,7 +55,7 @@ const LensPage: FC = () => {
                <div className='container-fluid mt-3'>
                     <div className='d-flex imgAndDscr'>
                         <div className='lens-img-box p-0'>
-                            <img src={lens?.url.replace('http://localhost:9000', '')} className='lens-img'></img>
+                            <img style={{ width: '280px', height: '205px', objectFit: 'cover' }} src={lens?.url.replace('http://localhost:9000', '')} className='lens-img'></img>
                         </div>
                         <div className='lens-description ps-5 mt-2'>
                             {lens?.description}

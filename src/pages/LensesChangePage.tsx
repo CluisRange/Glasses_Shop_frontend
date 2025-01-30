@@ -1,6 +1,5 @@
 import { FC, useEffect} from 'react'
 
-import LensCard from '../components/LensCard'
 import { Button } from 'react-bootstrap'
 import '../assets/css/lensesPage.css'
 import InputField from '../components/InputField'
@@ -11,37 +10,34 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../store';
 import { getLensesList, setSearchLensValuesAction } from '../slices/lensesSlice'
 import { Link, useNavigate } from 'react-router-dom';
+import LensToChangeCard from '../components/LensToChangeCard'
 
 import BasePage from './BasePage'
 
 const LensesPage: FC = () => {
-
-    const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
     const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
-    const isCurator = useSelector((state: RootState) => state.user.isCurator);     
-    const glasses_order_id = useSelector((state: RootState) => state.draftGlassesOrderSlice.glasses_order_id);
-    const lenses_count = useSelector((state: RootState) => state.draftGlassesOrderSlice.lenses_count);
-
+    const isCurator = useSelector((state: RootState) => state.user.isCurator);
     const { SearchLensValues, lenses} = useSelector((state: RootState) => state.lenses);
+    const navigate = useNavigate();
 
-    useEffect(() => {      
+    useEffect(() => {
+        if (!isCurator) {
+            navigate(ROUTES.ANAUTHORIZED);
+            return;
+        }
         dispatch(getLensesList());
-    },[dispatch])
+    }, [dispatch, isAuthenticated, navigate]);
 
     const setSearchValue = (val: { [key: string]: string }) => {
         dispatch(setSearchLensValuesAction(val))
-    }
-
-    const goToChangePage = () => {
-        navigate(ROUTES.LENSES_CHANGE);
     }
 
     return (
         <>
             <BasePage>
             
-            <BreadCrumbs crumbs={[{label: ROUTE_LABELS.LENSES}]}></BreadCrumbs>
+            <BreadCrumbs crumbs={[{label: ROUTE_LABELS.LENSES_CHANGE}]}></BreadCrumbs>
             <div className='d-flex flex-column'>
                 <div className='ms-3 d-flex search_and_basket'>
                     <div className='d-flex flex-column justify-content-start w-75'>
@@ -50,37 +46,25 @@ const LensesPage: FC = () => {
                         <InputField value={SearchLensValues.maxPrice} setValue = {setSearchValue} valuetype='maxPrice' placeholder='Цена до, руб.' inputClass='InputField' date={false} />
                         <Button className='mt-3 ms-3' variant='outline-danger' onClick={() => dispatch(getLensesList())} style={{ width: '100px' }}>Поиск</Button>
                     </div>
-                    {(isAuthenticated && isCurator) ? 
-                        <Button className='mt-2 ms-3' variant='outline-danger' onClick = {goToChangePage}style={{ width: '180px' }}>Изменить линзы</Button>
-                    : null}
-                    {(!isAuthenticated || !glasses_order_id) ? 
-                    <img src='/src/assets/img/empty_basket.jpeg' className='basket_img ms-3'></img>
-                    : (
-                        <div>
-                        <Link to={`${ROUTES.GLASSES_ORDER}/${glasses_order_id}`}>
-                            <img src='/src/assets/img/full_basket.jpeg' className='basket_img ms-3'></img>
-                        </Link>
-                        <div className='basket_count'>{lenses_count}</div>
-                        </div>
-                    )}
 
                 </div>
 
                 <div className='d-flex justify-content-center'>
-                <div className='d-flex justify-content-center flex-wrap gap-5 ms-4 me-4 mt-5 w-100 pe-4' style={{maxWidth: '1000px'}}>
+                <div className='d-flex justify-content-center flex-wrap gap-5 ms-4 me-4 mt-5 w-100 pe-4' style={{maxWidth: '90%'}}>
                     {lenses.map((lens) => {
-                        if (lens.status === 'active')
-                            return (
-                            <LensCard
+                        return (
+                            <LensToChangeCard
                                 key={lens.lens_id}
                                 id={lens.lens_id!}
                                 name={lens.name!}
-                                imageUrl={lens.url!}
-                                price={lens.price!}
-                                dioptres={''}
-                            ></LensCard>
+                                imageUrl={lens.url ?? ''}
+                                price={lens.price ?? 0}
+                                status={lens.status!}
+                                description={lens.description ?? ''}
+                            ></LensToChangeCard>
                         )
                     })}
+                    <LensToChangeCard></LensToChangeCard>
                 </div>
                 </div>
             </div>

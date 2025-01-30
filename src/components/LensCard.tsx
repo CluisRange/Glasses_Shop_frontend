@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
@@ -64,10 +64,13 @@ const LensCard: FC<LensCardProps> = (
         dispatch(setLenses(updatedLenses));
     };
 
+    useEffect(() => {
+    },[lenses])
+
     if (pathname === "/lenses") return (
         <Card  style={{ width: '18rem', height: '25rem' }} >
-            <Link className='align-self-start' style={{ width: '100%' }} to={`${ROUTES.LENSES}/${id}`}>
-                <Card.Img src={imageUrl.replace('http://localhost:9000', '') || '/src/assets/img/unknownLens.jpg'}/>
+            <Link className='align-self-start' style={{ width: '100%', height: '205px'}} to={`${ROUTES.LENSES}/${id}`}>
+                <Card.Img src={imageUrl || '/src/assets/img/unknownLens.jpg'} style={{ width: '287px', height: '205px', objectFit: 'cover' }}/>
             </Link>
             <Card.Body className='d-flex flex-column text-center' style = {{justifyContent:'space-between'}}>
                 <Card.Title style={{fontFamily:'Monrope'}}>{name}</Card.Title>
@@ -84,7 +87,7 @@ const LensCard: FC<LensCardProps> = (
         return (
             <div className='d-flex gap-4 border p-3'>
             <Link to={`${ROUTES.LENSES}/${id}`} className='w-50'>
-                <img src={imageUrl}></img>
+                <img src={imageUrl}style={{ width: '280px', height: '205px', objectFit: 'cover' }}></img>
             </Link>
             <div className='d-flex w-75 justify-content-center align-items-center text-center text-uppercase'>
                 <h3>{name}</h3>

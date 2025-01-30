@@ -53,6 +53,53 @@ export const getLensesList = createAsyncThunk(
     }
 )
 
+export const updateLens = createAsyncThunk(
+    'lenses/updateLens',
+    async (lens: Lens, {rejectWithValue}) => {
+        try{
+            const response = await api.lens.lensUpdate(lens.lens_id?.toString() || '', lens);
+            return response.data;
+        }catch (error: any){
+            return rejectWithValue(error.response.data.error || 'Ошибка при обновлении данных');
+        }
+    }
+)
+
+export const uploadLens = createAsyncThunk(
+    'lenses/uploadLens',
+    async (lens: Lens, { rejectWithValue }) => {
+        try {
+            const response = await api.lenses.lensesCreate(lens);
+            return response.data;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data.error || 'Ошибка при добавлении линзы');
+        }
+    }
+)
+
+interface UploadImagePayload {
+    id: string;
+    file: File | null;
+  }
+
+export const uploadImage = createAsyncThunk(
+    'images/upload',
+    async ({ id, file }: UploadImagePayload) => {
+        if (!file) {
+          throw new Error("Пожалуйста, выберите изображение для загрузки");
+        }
+    
+        const formData = new FormData();
+        formData.append('image', file); // Add the file to FormData
+    
+        // Call your API
+        await api.lens.lensAddPictureCreate(id, {
+          body: formData,
+        });
+      }
+  );
+;
+
 const lensesSlice = createSlice({
     name: 'lenses',
     initialState,
@@ -62,7 +109,18 @@ const lensesSlice = createSlice({
             if (payload.name != undefined) state.SearchLensValues.name = payload.name
             if (payload.minPrice != undefined) state.SearchLensValues.minPrice = payload.minPrice
             if (payload.maxPrice != undefined) state.SearchLensValues.maxPrice = payload.maxPrice
-        }
+        },
+        setLensChange(state, {payload}) {
+            state.lenses = state.lenses.map((lens) => {
+                if (lens.lens_id === payload.id) {
+                    lens.description = payload.description;
+                    lens.price = payload.price;
+                    lens.status = payload.status;
+                    return payload;
+                }
+                return null;
+            });
+        },
     },
 
     extraReducers: (builder) => {
@@ -81,14 +139,48 @@ const lensesSlice = createSlice({
                 item.price <= parseFloat(state.SearchLensValues.maxPrice)
             );
         });
+        builder.addCase(updateLens.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(updateLens.fulfilled, (state, { payload }) => {
+
+            state.loading = false;
+        });
+        builder.addCase(updateLens.rejected, (state, action) => {
+            state.error = action.payload as string;
+            state.loading = false;
+        });
+        builder.addCase(uploadImage.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(uploadImage.fulfilled, (state) => {
+            state.loading = false;
+        });
+        builder.addCase(uploadImage.rejected, (state, action) => {
+            state.error = action.payload as string;
+            state.loading = false;
+        });
+        
+        builder.addCase(uploadLens.pending, (state) => {    
+            state.loading = true;
+        });
+        builder.addCase(uploadLens.fulfilled, (state) => {
+            state.loading = false;
+        });
+        builder.addCase(uploadLens.rejected, (state, action) => {
+            state.error = action.payload as string;
+            state.loading = false;
+        });
     }
-})
+});
 
 export const useSearchLensValues = () => useSelector((state: RootState) => state.lenses.SearchLensValues)
 export const useLoadingStatus = () => useSelector((state: RootState) => state.lenses.loading)
 
+
 export const {
-    setSearchLensValues: setSearchLensValuesAction
+    setSearchLensValues: setSearchLensValuesAction,
+    setLensChange: setLensChangeAction
 } = lensesSlice.actions
 
 export default lensesSlice.reducer

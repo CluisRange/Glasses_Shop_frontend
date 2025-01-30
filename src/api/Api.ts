@@ -87,12 +87,21 @@ export interface User {
 export interface Lens {
   /** Lens id */
   lens_id?: number;
-  /** Name */
-  name?: string | null;
-  /** Description */
-  description?: string | null;
-  /** Status */
-  status?: string | null;
+  /**
+   * Name
+   * @minLength 1
+   */
+  name?: string;
+  /**
+   * Description
+   * @minLength 1
+   */
+  description?: string;
+  /**
+   * Status
+   * @minLength 1
+   */
+  status?: string;
   /** Url */
   url?: string | null;
   /**
@@ -100,7 +109,7 @@ export interface Lens {
    * @min -2147483648
    * @max 2147483647
    */
-  price?: number | null;
+  price?: number;
 }
 
 export interface MToMInserted {
@@ -154,6 +163,8 @@ export interface SingleGlassesOrder {
 }
 
 export interface GlassesOrder {
+  /** Qr */
+  qr?: string | null;
   /** Glasses order id */
   glasses_order_id?: number;
   /**
@@ -194,6 +205,14 @@ export interface GlassesOrder {
    * @format date-time
    */
   date_ended?: string | null;
+}
+
+export interface AddPic {
+  /**
+   * Image
+   * @format uri
+   */
+  image?: string;
 }
 
 export interface LensesListResponse {
@@ -524,14 +543,18 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PUT:/glasses_order/{id}/moderate/
      * @secure
      */
-    glassesOrderModerateUpdate: (id: string, data: GlassesOrder, params: RequestParams = {}) =>
-      this.request<GlassesOrder, any>({
+    glassesOrderModerateUpdate: (
+      id: string,
+      query?: {
+        isAccepted?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
         path: `/glasses_order/${id}/moderate/`,
         method: "PUT",
-        body: data,
+        query: query,
         secure: true,
-        type: ContentType.Json,
-        format: "json",
         ...params,
       }),
 
@@ -655,13 +678,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/lens/{id}/addPicture/
      * @secure
      */
-    lensAddPictureCreate: (id: string, data: Lens, params: RequestParams = {}) =>
-      this.request<Lens, any>({
+    lensAddPictureCreate: (id: string, params: RequestParams = {}) =>
+      this.request<void, any>({
         path: `/lens/${id}/addPicture/`,
         method: "POST",
-        body: data,
+        body: params.body,
         secure: true,
-        format: "json",
         ...params,
       }),
   };
